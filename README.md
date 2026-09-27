@@ -134,6 +134,7 @@ rides-analytics-pipeline/
 │   └── 📂 screenshots/               # Evidence of successful execution
 │       ├── airflow_dag_success.jpg
 │       ├── mapreduce_counters.jpg
+│       ├── hdfs_namenode_browser.png
 │       ├── hdfs_avg_speed.jpg
 │       ├── hdfs_avg_fare_per_km.jpg
 │       ├── seatunnel_avg_speed_output.jpg
@@ -303,6 +304,14 @@ seatunnel_transform  →  mr_avg_speed_by_city  →  mr_avg_fare_per_km_by_city 
 ![MapReduce job counters](docs/screenshots/mapreduce_counters.jpg)
 
 *920 map input records → 920 map output records → reduced to 10 output records (one per city). HDFS bytes written: 1 337 389.*
+
+---
+
+### HDFS NameNode — Pipeline Directories
+
+![HDFS NameNode browser showing pipeline directories](docs/screenshots/hdfs_namenode_browser.png)
+
+*Hadoop NameNode web UI confirming all 5 HDFS directories created under `/user/student/rides_pipeline`: `clean_trips` (Stage 1), `avg_speed` & `avg_fare_per_km` (Stages 2–3), and `speed_out` & `fare_out` (Stage 4 intermediates).*
 
 ---
 
