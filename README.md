@@ -248,35 +248,7 @@ seatunnel_transform  →  mr_avg_speed_by_city  →  mr_avg_fare_per_km_by_city 
 
 ---
 
-## 8 · Evaluation Checklist
-
-| Check | What the evaluator looks for |
-|-------|------------------------------|
-| ✅ Airflow DAG | `rides_analytics_pipeline` — all 4 tasks green |
-| ✅ YARN | Both MapReduce applications: FINISHED / SUCCEEDED |
-| ✅ HDFS NameNode | `/user/student/rides_pipeline/clean_trips`, `/avg_speed`, `/avg_fare_per_km` present |
-| ✅ Output CSVs | `costly.csv`, `cheap.csv`, `lowtraffic.csv`, `hightraffic.csv` match dataset |
-| ✅ Viva | Explain each stage and design choices |
-
----
-
-## 9 · Marks Breakdown
-
-| Component | Marks |
-|-----------|-------|
-| Airflow orchestration (DAG structure, full run success) | 2 |
-| SeaTunnel Job 1 — clean and load to HDFS | 2 |
-| MapReduce Job 1 — average speed per city | 1 |
-| MapReduce Job 2 — average fare per km per city | 1 |
-| SeaTunnel Job 2 — route to 4 CSV files | 2 |
-| Viva | 2 |
-| **Total** | **10** |
-
-> Final gradebook entry = total above scaled to **5 marks**.
-
----
-
-## 10 · Notes
+## 8 · Notes
 
 - Stages 1 & 4 use genuine **SeaTunnel**; stages 2 & 3 use genuine **Hadoop MapReduce** — no substitutes.
 - Thresholds `17.0` (fare) and `45.0` (speed) are fixed and must not be changed.
