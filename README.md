@@ -28,15 +28,48 @@ Nothing is simulated — SeaTunnel genuinely reads/writes HDFS; MapReduce jobs r
 
 ---
 
-## 2 · Repository Structure
+## 2 · Getting Started
+
+> **Reference guides** for installing and configuring the tools used in this project are in the [`docs/`](docs/) folder:
+>
+> | Guide | Description |
+> |-------|-------------|
+> | [`docs/Airflow_Install_Guide.pdf`](docs/Airflow_Install_Guide.pdf) | Step-by-step Airflow installation and simple task setup |
+> | [`docs/Apache_SeaTunnel_Guide.pdf`](docs/Apache_SeaTunnel_Guide.pdf) | Apache SeaTunnel setup and connector reference |
+
+### Requirements
+
+| Component | Version used | Install guide |
+|-----------|-------------|---------------|
+| **Java JDK** | 8 or later | `sudo apt install openjdk-8-jdk` |
+| **Hadoop** (HDFS + YARN) | 3.3.6 | See SeaTunnel guide, Section: Hadoop setup |
+| **Apache SeaTunnel** | 2.x | `docs/Apache_SeaTunnel_Guide.pdf` |
+| **Apache Airflow** | 2.x | `docs/Airflow_Install_Guide.pdf` |
+| **Python** | 3.8+ | Required by Airflow |
+
+Verify everything is running before triggering the DAG:
+```bash
+jps
+# Expected: NameNode, DataNode, ResourceManager, NodeManager, SecondaryNameNode
+airflow version
+$SEATUNNEL_HOME/bin/seatunnel.sh --version
+```
+
+---
+
+## 3 · Repository Structure
 
 ```
 rides-analytics-pipeline/
+├── docs/
+│   ├── Airflow_Install_Guide.pdf      # Airflow setup reference
+│   └── Apache_SeaTunnel_Guide.pdf     # SeaTunnel setup reference
 ├── dags/
-│   └── rides_analytics_pipeline.py   # Airflow DAG (all 4 tasks)
+│   ├── rides_analytics_pipeline.py   # Main Airflow DAG (all 4 tasks)
+│   └── hdfs_workflow.py              # HDFS CLI lab / smoke-test DAG
 ├── src/
-│   ├── AvgSpeedByCity.java            # MapReduce Job 1
-│   └── AvgFarePerKmByCity.java        # MapReduce Job 2
+│   ├── AvgSpeedByCity.java            # MapReduce Job 1 – avg speed
+│   └── AvgFarePerKmByCity.java        # MapReduce Job 2 – avg fare/km
 ├── seatunnel/
 │   ├── clean_load.conf                # Stage 1 – clean CSV → HDFS
 │   ├── costly.conf                    # Stage 4 – fare/km > 17
@@ -46,8 +79,8 @@ rides-analytics-pipeline/
 ├── seatunnel-verification/
 │   ├── employees.csv                  # Verification sample data
 │   ├── students.csv                   # Verification sample data
-│   ├── task1_local_console.conf       # SeaTunnel smoke test (local)
-│   └── task2_local_hdfs.conf          # SeaTunnel smoke test (HDFS)
+│   ├── task1_local_console.conf       # SeaTunnel smoke test (local→console)
+│   └── task2_local_hdfs.conf          # SeaTunnel smoke test (local→HDFS)
 ├── input/
 │   └── trips.csv                      # Raw dataset (1 000 rows, 10 cities)
 ├── output/
@@ -58,19 +91,6 @@ rides-analytics-pipeline/
 ├── rides-analytics.jar                # Compiled MapReduce JAR
 └── README.md
 ```
-
----
-
-## 3 · Environment Prerequisites
-
-| Component | Version used | Verify running |
-|-----------|-------------|----------------|
-| Hadoop (HDFS + YARN) | 3.3.6 | `jps` → NameNode, DataNode, ResourceManager, NodeManager |
-| Apache SeaTunnel | 2.x | `$SEATUNNEL_HOME/bin/seatunnel.sh --version` |
-| Apache Airflow | 2.x | `airflow version` |
-| Java | 8+ | `java -version` |
-
-> **Before starting:** run `jps` and confirm all four Hadoop daemons are up.
 
 ---
 
