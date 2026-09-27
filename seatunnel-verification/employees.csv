@@ -1,0 +1,40 @@
+env {
+	parallelism = 1
+	job.mode = "BATCH"
+} 
+
+source {
+	LocalFile {
+		path = "/home/<YOUR_USERNAME>/seatunnel-verification/employees.csv"
+		file_format_type = "csv"
+		skip_header_row_number = 1
+		schema = {
+			fields {
+				employee_id = int
+				name = string
+				department = string
+				city = string
+				salary = int
+				}
+			}
+		plugin_output = "employees"
+	}
+}
+transform {
+	Sql {
+		plugin_input = "employees"
+		plugin_output = "employees_transformed"
+		query = "select employee_id, name, case when department ='Eng' then 'Engineering' when department = 'HR' then 'Human Resources' else department end as department, city, salary * 11 / 10 as salary from dual"
+	}
+}
+
+sink {
+	HdfsFile {
+		plugin_input = "employees_transformed"
+		fs.defaultFS = "hdfs://127.0.0.1:9000"
+		path = "/seatunnel-verification/employees"
+		file_format_type = "csv"
+		field_delimiter = ","
+		write_mode = "overwrite"
+	} 
+}
